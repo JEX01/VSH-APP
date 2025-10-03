@@ -1,5 +1,5 @@
-name: plantvision_mobile
-description: Industrial Photo Repository Mobile Application
+name: ntpc_photo_inspection
+description: NTPC Photo Inspection Mobile App for Power Plant Workers
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -44,9 +44,12 @@ dependencies:
   
   # Notifications
   flutter_local_notifications: ^16.1.0
+  firebase_messaging: ^14.7.9
+  firebase_core: ^2.24.2
   
   # QR/Barcode Scanner
   mobile_scanner: ^3.5.5
+  qr_code_scanner: ^1.0.1
   
   # Network Info
   connectivity_plus: ^5.0.1

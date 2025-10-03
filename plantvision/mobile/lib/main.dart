@@ -17,13 +17,13 @@ void main() async {
   
   runApp(
     const ProviderScope(
-      child: PlantVisionApp(),
+      child: NTPCPhotoInspectionApp(),
     ),
   );
 }
 
-class PlantVisionApp extends StatelessWidget {
-  const PlantVisionApp({super.key});
+class NTPCPhotoInspectionApp extends StatelessWidget {
+  const NTPCPhotoInspectionApp({super.key});
 
   @override
   Widget build(BuildContext context) {

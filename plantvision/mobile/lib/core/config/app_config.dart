@@ -1,11 +1,11 @@
 class AppConfig {
   // App Info
-  static const String appName = 'PLANTVISION';
+  static const String appName = 'NTPC Photo Inspection';
   static const String appVersion = '1.0.0';
   static const String buildNumber = '1';
   
   // API Configuration
-  static const String baseUrl = 'https://api.plantvision.com';
+  static const String baseUrl = 'https://api.ntpc-photo-inspection.com';
   static const String apiVersion = 'v1';
   static const String apiTimeout = '30';
   
@@ -15,7 +15,7 @@ class AppConfig {
   static const int tokenExpiryMinutes = 60;
   
   // Database
-  static const String databaseName = 'plantvision.db';
+  static const String databaseName = 'ntpc_photo_inspection.db';
   static const int databaseVersion = 1;
   
   // Storage
@@ -58,9 +58,9 @@ class AppConfig {
   static const Duration backgroundSyncFrequency = Duration(hours: 1);
   
   // Notifications
-  static const String notificationChannelId = 'plantvision_channel';
-  static const String notificationChannelName = 'PlantVision Notifications';
-  static const String notificationChannelDescription = 'Photo upload and sync notifications';
+  static const String notificationChannelId = 'ntpc_photo_inspection_channel';
+  static const String notificationChannelName = 'NTPC Photo Inspection';
+  static const String notificationChannelDescription = 'Task assignments, photo upload status, and sync notifications';
   
   // Feature Flags
   static const bool enableOfflineMode = true;

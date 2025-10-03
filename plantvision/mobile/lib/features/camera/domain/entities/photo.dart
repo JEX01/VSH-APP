@@ -1,181 +1,290 @@
 class Photo {
   final String id;
-  final String localPath;
-  final String? thumbnailPath;
+  final String userId;
   final String equipmentId;
-  final String? equipmentName;
-  final String? areaId;
-  final String? areaName;
-  final String? plantId;
-  final String? plantName;
+  final String filename;
+  final String? originalFilename;
+  final String? s3Key;
+  final String? thumbnailS3Key;
+  final String mimeType;
+  final int fileSize;
+  final int? width;
+  final int? height;
   final double? latitude;
   final double? longitude;
-  final String? locationName;
+  final double? gpsAccuracy;
   final DateTime capturedAt;
+  final String? deviceInfo;
+  final String? notes;
+  final PhotoStatus status;
+  final String? rejectionReason;
+  final String? approvedBy;
+  final DateTime? approvedAt;
+  final Map<String, dynamic> metadata;
+  final String? checksum;
+  final String? photoUrl;
+  final String? thumbnailUrl;
+  final String? username;
+  final String? userFirstName;
+  final String? userLastName;
+  final String? equipmentCode;
+  final String? equipmentName;
+  final String? equipmentType;
+  final String? plantCode;
+  final String? plantName;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final String? severity;
-  final String? notes;
-  final List<String>? tags;
-  final bool isUploaded;
-  final DateTime? uploadedAt;
-  final String? serverUrl;
-  final int retryCount;
-  final DateTime? lastRetryAt;
-  final String? errorMessage;
-  final int? fileSize;
-  final String? mimeType;
 
   const Photo({
     required this.id,
-    required this.localPath,
-    this.thumbnailPath,
+    required this.userId,
     required this.equipmentId,
-    this.equipmentName,
-    this.areaId,
-    this.areaName,
-    this.plantId,
-    this.plantName,
+    required this.filename,
+    this.originalFilename,
+    this.s3Key,
+    this.thumbnailS3Key,
+    required this.mimeType,
+    required this.fileSize,
+    this.width,
+    this.height,
     this.latitude,
     this.longitude,
-    this.locationName,
+    this.gpsAccuracy,
     required this.capturedAt,
+    this.deviceInfo,
+    this.notes,
+    required this.status,
+    this.rejectionReason,
+    this.approvedBy,
+    this.approvedAt,
+    this.metadata = const {},
+    this.checksum,
+    this.photoUrl,
+    this.thumbnailUrl,
+    this.username,
+    this.userFirstName,
+    this.userLastName,
+    this.equipmentCode,
+    this.equipmentName,
+    this.equipmentType,
+    this.plantCode,
+    this.plantName,
     required this.createdAt,
     required this.updatedAt,
-    this.severity,
-    this.notes,
-    this.tags,
-    this.isUploaded = false,
-    this.uploadedAt,
-    this.serverUrl,
-    this.retryCount = 0,
-    this.lastRetryAt,
-    this.errorMessage,
-    this.fileSize,
-    this.mimeType,
   });
+
+  String get displayName => originalFilename ?? filename;
+  String get userFullName => 
+      userFirstName != null && userLastName != null 
+          ? '$userFirstName $userLastName'
+          : username ?? 'Unknown User';
+  String get equipmentDisplayName => 
+      equipmentCode != null && equipmentName != null
+          ? '$equipmentCode - $equipmentName'
+          : 'Unknown Equipment';
+  
+  bool get hasLocation => latitude != null && longitude != null;
+  bool get isPending => status == PhotoStatus.pending;
+  bool get isApproved => status == PhotoStatus.approved;
+  bool get isRejected => status == PhotoStatus.rejected;
+  bool get isDeleted => status == PhotoStatus.deleted;
+  
+  String get fileSizeFormatted {
+    if (fileSize < 1024) return '${fileSize}B';
+    if (fileSize < 1024 * 1024) return '${(fileSize / 1024).toStringAsFixed(1)}KB';
+    return '${(fileSize / (1024 * 1024)).toStringAsFixed(1)}MB';
+  }
 
   Photo copyWith({
     String? id,
-    String? localPath,
-    String? thumbnailPath,
+    String? userId,
     String? equipmentId,
-    String? equipmentName,
-    String? areaId,
-    String? areaName,
-    String? plantId,
-    String? plantName,
+    String? filename,
+    String? originalFilename,
+    String? s3Key,
+    String? thumbnailS3Key,
+    String? mimeType,
+    int? fileSize,
+    int? width,
+    int? height,
     double? latitude,
     double? longitude,
-    String? locationName,
+    double? gpsAccuracy,
     DateTime? capturedAt,
+    String? deviceInfo,
+    String? notes,
+    PhotoStatus? status,
+    String? rejectionReason,
+    String? approvedBy,
+    DateTime? approvedAt,
+    Map<String, dynamic>? metadata,
+    String? checksum,
+    String? photoUrl,
+    String? thumbnailUrl,
+    String? username,
+    String? userFirstName,
+    String? userLastName,
+    String? equipmentCode,
+    String? equipmentName,
+    String? equipmentType,
+    String? plantCode,
+    String? plantName,
     DateTime? createdAt,
     DateTime? updatedAt,
-    String? severity,
-    String? notes,
-    List<String>? tags,
-    bool? isUploaded,
-    DateTime? uploadedAt,
-    String? serverUrl,
-    int? retryCount,
-    DateTime? lastRetryAt,
-    String? errorMessage,
-    int? fileSize,
-    String? mimeType,
   }) {
     return Photo(
       id: id ?? this.id,
-      localPath: localPath ?? this.localPath,
-      thumbnailPath: thumbnailPath ?? this.thumbnailPath,
+      userId: userId ?? this.userId,
       equipmentId: equipmentId ?? this.equipmentId,
-      equipmentName: equipmentName ?? this.equipmentName,
-      areaId: areaId ?? this.areaId,
-      areaName: areaName ?? this.areaName,
-      plantId: plantId ?? this.plantId,
-      plantName: plantName ?? this.plantName,
+      filename: filename ?? this.filename,
+      originalFilename: originalFilename ?? this.originalFilename,
+      s3Key: s3Key ?? this.s3Key,
+      thumbnailS3Key: thumbnailS3Key ?? this.thumbnailS3Key,
+      mimeType: mimeType ?? this.mimeType,
+      fileSize: fileSize ?? this.fileSize,
+      width: width ?? this.width,
+      height: height ?? this.height,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
-      locationName: locationName ?? this.locationName,
+      gpsAccuracy: gpsAccuracy ?? this.gpsAccuracy,
       capturedAt: capturedAt ?? this.capturedAt,
+      deviceInfo: deviceInfo ?? this.deviceInfo,
+      notes: notes ?? this.notes,
+      status: status ?? this.status,
+      rejectionReason: rejectionReason ?? this.rejectionReason,
+      approvedBy: approvedBy ?? this.approvedBy,
+      approvedAt: approvedAt ?? this.approvedAt,
+      metadata: metadata ?? this.metadata,
+      checksum: checksum ?? this.checksum,
+      photoUrl: photoUrl ?? this.photoUrl,
+      thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
+      username: username ?? this.username,
+      userFirstName: userFirstName ?? this.userFirstName,
+      userLastName: userLastName ?? this.userLastName,
+      equipmentCode: equipmentCode ?? this.equipmentCode,
+      equipmentName: equipmentName ?? this.equipmentName,
+      equipmentType: equipmentType ?? this.equipmentType,
+      plantCode: plantCode ?? this.plantCode,
+      plantName: plantName ?? this.plantName,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      severity: severity ?? this.severity,
-      notes: notes ?? this.notes,
-      tags: tags ?? this.tags,
-      isUploaded: isUploaded ?? this.isUploaded,
-      uploadedAt: uploadedAt ?? this.uploadedAt,
-      serverUrl: serverUrl ?? this.serverUrl,
-      retryCount: retryCount ?? this.retryCount,
-      lastRetryAt: lastRetryAt ?? this.lastRetryAt,
-      errorMessage: errorMessage ?? this.errorMessage,
-      fileSize: fileSize ?? this.fileSize,
-      mimeType: mimeType ?? this.mimeType,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'local_path': localPath,
-      'thumbnail_path': thumbnailPath,
-      'equipment_id': equipmentId,
-      'equipment_name': equipmentName,
-      'area_id': areaId,
-      'area_name': areaName,
-      'plant_id': plantId,
-      'plant_name': plantName,
+      'userId': userId,
+      'equipmentId': equipmentId,
+      'filename': filename,
+      'originalFilename': originalFilename,
+      's3Key': s3Key,
+      'thumbnailS3Key': thumbnailS3Key,
+      'mimeType': mimeType,
+      'fileSize': fileSize,
+      'width': width,
+      'height': height,
       'latitude': latitude,
       'longitude': longitude,
-      'location_name': locationName,
-      'captured_at': capturedAt.millisecondsSinceEpoch,
-      'created_at': createdAt.millisecondsSinceEpoch,
-      'updated_at': updatedAt.millisecondsSinceEpoch,
-      'severity': severity,
+      'gpsAccuracy': gpsAccuracy,
+      'capturedAt': capturedAt.millisecondsSinceEpoch,
+      'deviceInfo': deviceInfo,
       'notes': notes,
-      'tags': tags?.join(','),
-      'is_uploaded': isUploaded ? 1 : 0,
-      'uploaded_at': uploadedAt?.millisecondsSinceEpoch,
-      'server_url': serverUrl,
-      'retry_count': retryCount,
-      'last_retry_at': lastRetryAt?.millisecondsSinceEpoch,
-      'error_message': errorMessage,
-      'file_size': fileSize,
-      'mime_type': mimeType,
+      'status': status.name,
+      'rejectionReason': rejectionReason,
+      'approvedBy': approvedBy,
+      'approvedAt': approvedAt?.millisecondsSinceEpoch,
+      'metadata': metadata,
+      'checksum': checksum,
+      'photoUrl': photoUrl,
+      'thumbnailUrl': thumbnailUrl,
+      'username': username,
+      'userFirstName': userFirstName,
+      'userLastName': userLastName,
+      'equipmentCode': equipmentCode,
+      'equipmentName': equipmentName,
+      'equipmentType': equipmentType,
+      'plantCode': plantCode,
+      'plantName': plantName,
+      'createdAt': createdAt.millisecondsSinceEpoch,
+      'updatedAt': updatedAt.millisecondsSinceEpoch,
     };
   }
 
   factory Photo.fromJson(Map<String, dynamic> json) {
     return Photo(
       id: json['id'] as String,
-      localPath: json['local_path'] as String,
-      thumbnailPath: json['thumbnail_path'] as String?,
-      equipmentId: json['equipment_id'] as String,
-      equipmentName: json['equipment_name'] as String?,
-      areaId: json['area_id'] as String?,
-      areaName: json['area_name'] as String?,
-      plantId: json['plant_id'] as String?,
-      plantName: json['plant_name'] as String?,
-      latitude: json['latitude'] as double?,
-      longitude: json['longitude'] as double?,
-      locationName: json['location_name'] as String?,
-      capturedAt: DateTime.fromMillisecondsSinceEpoch(json['captured_at'] as int),
-      createdAt: DateTime.fromMillisecondsSinceEpoch(json['created_at'] as int),
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(json['updated_at'] as int),
-      severity: json['severity'] as String?,
+      userId: json['user_id'] ?? json['userId'] as String,
+      equipmentId: json['equipment_id'] ?? json['equipmentId'] as String,
+      filename: json['filename'] as String,
+      originalFilename: json['original_filename'] ?? json['originalFilename'] as String?,
+      s3Key: json['s3_key'] ?? json['s3Key'] as String?,
+      thumbnailS3Key: json['thumbnail_s3_key'] ?? json['thumbnailS3Key'] as String?,
+      mimeType: json['mime_type'] ?? json['mimeType'] as String,
+      fileSize: json['file_size'] ?? json['fileSize'] as int,
+      width: json['width'] as int?,
+      height: json['height'] as int?,
+      latitude: (json['latitude'] as num?)?.toDouble(),
+      longitude: (json['longitude'] as num?)?.toDouble(),
+      gpsAccuracy: (json['gps_accuracy'] ?? json['gpsAccuracy'] as num?)?.toDouble(),
+      capturedAt: DateTime.parse((json['captured_at'] ?? json['capturedAt']) as String),
+      deviceInfo: json['device_info'] ?? json['deviceInfo'] as String?,
       notes: json['notes'] as String?,
-      tags: json['tags'] != null ? (json['tags'] as String).split(',') : null,
-      isUploaded: (json['is_uploaded'] as int) == 1,
-      uploadedAt: json['uploaded_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(json['uploaded_at'] as int)
+      status: PhotoStatus.fromString(json['status'] as String),
+      rejectionReason: json['rejection_reason'] ?? json['rejectionReason'] as String?,
+      approvedBy: json['approved_by'] ?? json['approvedBy'] as String?,
+      approvedAt: json['approved_at'] != null || json['approvedAt'] != null
+          ? DateTime.parse((json['approved_at'] ?? json['approvedAt']) as String)
           : null,
-      serverUrl: json['server_url'] as String?,
-      retryCount: json['retry_count'] as int? ?? 0,
-      lastRetryAt: json['last_retry_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(json['last_retry_at'] as int)
-          : null,
-      errorMessage: json['error_message'] as String?,
-      fileSize: json['file_size'] as int?,
-      mimeType: json['mime_type'] as String?,
+      metadata: json['metadata'] as Map<String, dynamic>? ?? {},
+      checksum: json['checksum'] as String?,
+      photoUrl: json['photo_url'] ?? json['photoUrl'] as String?,
+      thumbnailUrl: json['thumbnail_url'] ?? json['thumbnailUrl'] as String?,
+      username: json['username'] as String?,
+      userFirstName: json['first_name'] ?? json['userFirstName'] as String?,
+      userLastName: json['last_name'] ?? json['userLastName'] as String?,
+      equipmentCode: json['equipment_code'] ?? json['equipmentCode'] as String?,
+      equipmentName: json['equipment_name'] ?? json['equipmentName'] as String?,
+      equipmentType: json['equipment_type'] ?? json['equipmentType'] as String?,
+      plantCode: json['plant_code'] ?? json['plantCode'] as String?,
+      plantName: json['plant_name'] ?? json['plantName'] as String?,
+      createdAt: DateTime.parse((json['created_at'] ?? json['createdAt']) as String),
+      updatedAt: DateTime.parse((json['updated_at'] ?? json['updatedAt']) as String),
     );
+  }
+}
+
+enum PhotoStatus {
+  pending,
+  approved,
+  rejected,
+  deleted;
+
+  static PhotoStatus fromString(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return PhotoStatus.pending;
+      case 'approved':
+        return PhotoStatus.approved;
+      case 'rejected':
+        return PhotoStatus.rejected;
+      case 'deleted':
+        return PhotoStatus.deleted;
+      default:
+        throw ArgumentError('Invalid photo status: $status');
+    }
+  }
+
+  String get displayName {
+    switch (this) {
+      case PhotoStatus.pending:
+        return 'Pending Review';
+      case PhotoStatus.approved:
+        return 'Approved';
+      case PhotoStatus.rejected:
+        return 'Rejected';
+      case PhotoStatus.deleted:
+        return 'Deleted';
+    }
   }
 }
